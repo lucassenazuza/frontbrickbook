@@ -1,26 +1,33 @@
-import React from 'react';
+import React from "react";
 
-import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import LoginPage from './pages/LoginPage';
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+import Home from "./pages/Home";
+import LoginPage from "./pages/LoginPage";
 
+import { AuthContext, AuthProvider } from "./contexts/auth";
+import { useContext } from "react";
+import Layout from "./components/Layout";
+import AddItem from "./components/AddItem";
 
-import { AuthContext, AuthProvider } from "./contexts/auth"
-import { useContext } from 'react';
 function AppRoutes(props) {
-    const Private = ({children}) => {
-      const { authenticated, loading } = useContext(AuthContext);
-    
+  const Private = ({ children }) => {
+    const { authenticated, loading } = useContext(AuthContext);
+
     //antes de verificar se esta autenticado, verifico se esta carregado
-    if(loading) {
-      return <div className="loading"> Carregando...</div>
+    if (loading) {
+      return <div className="loading"> Carregando...</div>;
     }
 
-    if(!authenticated){
+    if (!authenticated) {
       return <Navigate to="/login" />;
     }
-  return children;  
-  }
+    return children;
+  };
 
   // user != null
   // authenticate false
@@ -28,10 +35,44 @@ function AppRoutes(props) {
   return (
     <div>
       <Router>
-      <AuthProvider >
+        <AuthProvider>
           <Routes>
             <Route exact path="/login" element={<LoginPage />} />
-            <Route exact path="/" element={<Private><Home /></Private>} />
+
+            <Route
+              exact
+              path="/"
+              element={
+                <Private>
+                  <Layout>
+                    <Home />
+                  </Layout>
+                </Private>
+              }
+            />
+            <Route
+              exact
+              path="/searchlego"
+              element={
+                <Private>
+                  <Layout>
+                    <Home />
+                  </Layout>
+                </Private>
+              }
+            />
+            <Route
+              exact
+              path="/addlego"
+              element={
+                <Private>
+                  <Layout>
+                    <AddItem />
+                  </Layout>
+                </Private>
+              }
+            />
+
             {/* Home Page */}
           </Routes>
         </AuthProvider>

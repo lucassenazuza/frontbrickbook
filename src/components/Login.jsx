@@ -4,14 +4,14 @@ import {
   TextField,
 } from "@mui/material";
 import React from "react";
-import api from '../../services/api'
+import api from '../services/api'
 
 import { makeStyles } from "@material-ui/styles";
 import { Button } from "@material-ui/core";
 import { KeyboardArrowRight } from "@mui/icons-material";
-import LogoLego from "components/logoLego/LogoLego";
+import LogoLego from "components/LogoLego";
 import { useState, useContext } from "react";
-import { AuthContext } from "../../contexts/auth";
+import { AuthContext } from "../contexts/auth";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -52,18 +52,6 @@ function Login(props) {
     e.preventDefault()
 
       login(email, password) // integração com meu contexto
-      // api
-      // .post("/signin", { "email":user, "password":password})
-      // .then((response) => { console.log(String(response.statusText));
-      //     if(response.status === 200){
-      //       console.log('Status é 200')
-      //     }
-      // } )
-      // .catch((err) => {
-      //   console.log(`Status é ${err.response.status}, ${err.response.statusText}`)
-      // });
-
-
   }
   return (
     <div>
@@ -79,7 +67,6 @@ function Login(props) {
             {/* <Typography variant="h4" color="initial" className={classes.item}>
               BrickBook
             </Typography> */}
-            <p>{String(authenticated)} </p>
             <LogoLego locationFile={'/logobrick.png'}/>
             <Grid item className={classes.item}>
               <TextField label="Login" color="secondary" fullWidth required onChange = {(e) => {setEmail(e.target.value)}} />
@@ -88,6 +75,7 @@ function Login(props) {
               <TextField
                 label="Password"
                 color="secondary"
+                type="password"
                 fullWidth
                 required
                 onChange = {(e) => {setPassword(e.target.value)}}

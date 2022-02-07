@@ -25,6 +25,11 @@
       "email": "lu@biu.com",
       "password": "$2a$10$szM5Y2z56nQhxvO1bGD8GOeWIguwQ0YfZ0H6uzPpz1xqeXd5JI5Im",
       "id": 5
+    },
+    {
+      "email": "lu@lu.com",
+      "password": "$2a$10$2oxP0mYbEiBILl8oCGfUk.slJlfnDnUudFQkoDEvG2uCzfKxsyYFC",
+      "id": 6
     }
   ]
 }

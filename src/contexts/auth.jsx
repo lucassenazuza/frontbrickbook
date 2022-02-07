@@ -27,8 +27,8 @@ export const AuthProvider = ({children}) => {
       console.log(response.data);
 
       //api cria uma session, e api retona usuario
-      const loggedUser = email;
-      const token = response.data.token;
+      const loggedUser = JSON.stringify(response.data.user);
+      const token = response.data.accessToken;
       
       //sempre q a api for enviar uma req, vai enviar esse token
       api.defaults.headers.Authorization = `Bearer ${token}`;

@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
-import Login from "components/login/Login";
-import LogoLego from "components/logoLego/LogoLego";
+import Login from "components/Login";
+import LogoLego from "components/LogoLego";
 
 import React from "react";
 
