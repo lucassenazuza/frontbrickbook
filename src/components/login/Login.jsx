@@ -10,7 +10,8 @@ import { makeStyles } from "@material-ui/styles";
 import { Button } from "@material-ui/core";
 import { KeyboardArrowRight } from "@mui/icons-material";
 import LogoLego from "components/logoLego/LogoLego";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../../contexts/auth";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -40,23 +41,27 @@ const useStyles = makeStyles((theme) => {
 
 function Login(props) {
   const classes = useStyles();
-  const [user, setUser] = useState('');
+
+  const { authenticated, login } = useContext(AuthContext);
+
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-      api
-      .post("/signin", { "email":user, "password":password})
-      .then((response) => { console.log(String(response.statusText));
-          if(response.status === 200){
-            console.log('Status é 200')
-          }
-      } )
-      .catch((err) => {
-        console.log(`Status é ${err.response.status}, ${err.response.statusText}`)
-      });
+      login(email, password) // integração com meu contexto
+      // api
+      // .post("/signin", { "email":user, "password":password})
+      // .then((response) => { console.log(String(response.statusText));
+      //     if(response.status === 200){
+      //       console.log('Status é 200')
+      //     }
+      // } )
+      // .catch((err) => {
+      //   console.log(`Status é ${err.response.status}, ${err.response.statusText}`)
+      // });
 
 
   }
@@ -74,9 +79,10 @@ function Login(props) {
             {/* <Typography variant="h4" color="initial" className={classes.item}>
               BrickBook
             </Typography> */}
+            <p>{String(authenticated)} </p>
             <LogoLego locationFile={'/logobrick.png'}/>
             <Grid item className={classes.item}>
-              <TextField label="Login" color="secondary" fullWidth required onChange = {(e) => {setUser(e.target.value)}} />
+              <TextField label="Login" color="secondary" fullWidth required onChange = {(e) => {setEmail(e.target.value)}} />
             </Grid>
             <Grid item className={classes.item}>
               <TextField
