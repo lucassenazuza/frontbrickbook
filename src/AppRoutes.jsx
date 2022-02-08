@@ -13,6 +13,7 @@ import { AuthContext, AuthProvider } from "./contexts/auth";
 import { useContext } from "react";
 import Layout from "./components/Layout";
 import AddItem from "./components/AddItem";
+import SearchLego from "./components/SearchLego";
 
 function AppRoutes(props) {
   const Private = ({ children }) => {
@@ -56,7 +57,7 @@ function AppRoutes(props) {
               element={
                 <Private>
                   <Layout>
-                    <Home />
+                    <SearchLego />
                   </Layout>
                 </Private>
               }

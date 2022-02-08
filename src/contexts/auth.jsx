@@ -33,7 +33,7 @@ export const AuthProvider = ({children}) => {
       //sempre q a api for enviar uma req, vai enviar esse token
       api.defaults.headers.Authorization = `Bearer ${token}`;
 
-      localStorage.setItem("user", JSON.stringify(loggedUser));
+      localStorage.setItem("user", loggedUser);
       localStorage.setItem("token", token);
       
       setUser(loggedUser);

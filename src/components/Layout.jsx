@@ -15,37 +15,28 @@ import { AuthContext } from "../contexts/auth";
 import React, { useContext } from "react";
 import LogoLego from "./LogoLego";
 import { blue } from "@material-ui/core/colors";
+import UserBar from "./UserBar";
 
 const drawerWidth = 300;
 
 const useStyles = makeStyles((theme) => {
   return {
     page: {
-      width: "100%",
-      padding: theme.spacing(3),
+      marginLeft: 240,
     },
     root: {
       display: "flex",
+      background: "#f4f4f4",
     },
     drawer: {
-      width: drawerWidth,
-    },
-    drawerPaper: {
-      width: drawerWidth,
+      width: drawerWidth
     },
     active: {
       background: "#f4f4f4",
     },
-    title: {
-      padding: theme.spacing(2),
-    },
-    appBar: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
-    date: {
-      flexGrow: 1,
-    },
+    toolbar:{ 
+      padding: 20,
+      background: "#4287f5"}
   };
 });
 
@@ -106,11 +97,11 @@ function Layout({ children }) {
           ))}
         </List>
       </Drawer>
+      <UserBar></UserBar>
       <div className={classes.page}>
-        <p>dfsfs</p>
+
         {children}
       </div>
-      <p>dfsfs</p>
     </div>
   );
 }
