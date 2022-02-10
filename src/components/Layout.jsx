@@ -19,25 +19,22 @@ import UserBar from "./UserBar";
 
 const drawerWidth = 300;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(() => {
   return {
     page: {
       marginLeft: 240,
     },
     root: {
       display: "flex",
-      background: "#f4f4f4",
+      background: "#dceefa",
     },
-    drawer: {
-      width: drawerWidth
+    paper: {
+      width: drawerWidth,
+      background: "blue"
     },
     active: {
-      background: "#f4f4f4",
-    },
-    toolbar:{ 
-      padding: 20,
-      background: "#4287f5"}
-  };
+      background: "#dceefa",
+  }};
 });
 
 function Layout({ children }) {
@@ -66,7 +63,7 @@ function Layout({ children }) {
 
   return (
     <div>
-      <Drawer className={classes.drawer} variant="permanent" anchor="left">
+      <Drawer className={classes.paper} variant="permanent" anchor="left">
         <div
           onClick={() => {
             navigate("/");

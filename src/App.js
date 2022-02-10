@@ -1,10 +1,15 @@
 import "./App.css";
 import React from "react";
 import AppRoutes from "./AppRoutes";
-import { createMuiTheme, ThemeProvider } from '@material-ui/core'
+import { createTheme, ThemeProvider } from '@material-ui/core'
 
 
-const theme = createMuiTheme({
+const theme = createTheme({
+  palette:{
+    background: {
+      default: "#303030"
+    }
+  },
   typography: {
     fontFamily: 'Arial',
     fontWeightLight: 400,
