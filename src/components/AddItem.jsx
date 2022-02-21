@@ -27,10 +27,10 @@ const useStyles = makeStyles({
 
 function AddItem(props) {
     const classes = useStyles()
-    const [title, setTitle] = useState('')
-    const [details, setDetails] = useState('')
+    const [numberSet, setNumberSet] = useState('')
+    const [description, setDescription] = useState('')
     const [titleError, setTitleError] = useState(false)
-    const [detailsError, setDetailsError] = useState(false)
+    const [error, setError] = useState(false)
     const [category, setCategory] = useState('money')
 
     const handleSubmit = (e) => {
@@ -38,11 +38,8 @@ function AddItem(props) {
         setTitleError(false)
         setDetailsError(false)
 
-        if (title == '') {
-            setTitleError(true)
-        }
-        if (details == '') {
-            setDetailsError(true)
+        if (numberSet == '') {
+            setError(true)
         }
         //   if (title && details) {
         //     fetch('http://localhost:8000/notes', {
@@ -81,7 +78,7 @@ function AddItem(props) {
 
                         <TextField
                             onChange={(e) => setTitle(e.target.value)}
-                            label="Nome"
+                            label="Nome Set"
                             variant="outlined"
                             color="secondary"
                             fullWidth
@@ -105,8 +102,8 @@ function AddItem(props) {
                     </Grid>
                     <Grid item md={12} lg={12}>
                         <TextField
-                            onChange={(e) => setDetails(e.target.value)}
-                            label="Detalhes"
+                            onChange={(e) => setDescription(e.target.value)}
+                            label="Descrição"
                             variant="outlined"
                             color="secondary"
                             multiline
@@ -115,7 +112,7 @@ function AddItem(props) {
                             required
                         />
                     </Grid>
-                    <Grid item md={7} lg={7}>
+                    <Grid item md={12} lg={12}>
                         <TextField
                             onChange={(e) => setDetails(e.target.value)}
                             label="Valor"
@@ -125,7 +122,7 @@ function AddItem(props) {
                             required
                         />
                     </Grid>
-                    <Grid item md={5} lg={5}>
+                    {/* <Grid item md={5} lg={5}>
                         <TextField
                             onChange={(e) => setDetails(e.target.value)}
                             label="Quantidade Peças"
@@ -134,7 +131,7 @@ function AddItem(props) {
                             fullWidth
                             required
                         />
-                    </Grid>
+                    </Grid> */}
                     <Grid item md={2} lg={2} >
                  <Typography variant="h6" color="#000">Foto do Set</Typography></Grid>
                 <Grid item md={3} lg={3} >
