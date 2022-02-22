@@ -27,20 +27,49 @@ const useStyles = makeStyles({
 
 function AddItem(props) {
     const classes = useStyles()
+    const [nameSet, setNameSet] = useState('')
     const [numberSet, setNumberSet] = useState('')
     const [description, setDescription] = useState('')
-    const [titleError, setTitleError] = useState(false)
+    const [complete, setComplete] = useState("complete")
+    const [value, setValue] = useState(0.0)
+    const [selectedFile, setSelectedFile] = useState();
+    const [isFilePicked, setIsFilePicked] = useState(false);
     const [error, setError] = useState(false)
-    const [category, setCategory] = useState('money')
 
+    const changeHandler = (e) => {
+        setSelectedFile(e.target.files[0]);
+        setIsFilePicked(true);
+    };
+    const hiddenFileInput = React.useRef(null);
+  
+    // Programatically click the hidden file input element
+    // when the Button component is clicked
+    const handleClick = event => {
+      hiddenFileInput.current.click();
+    };
+    // Call a function (passed as a prop from the parent component)
+    // to handle the user-selected file 
+    const handleChange = event => {
+      const fileUploaded = event.target.files[0];
+      props.handleFile(fileUploaded);
+    };
     const handleSubmit = (e) => {
         e.preventDefault()
-        setTitleError(false)
-        setDetailsError(false)
-
+        setError(false)
         if (numberSet == '') {
             setError(true)
         }
+        const jsonProduct = {
+            "numberSet": numberSet,
+            "nameSet": nameSet,
+            "complete": complete,
+            "description": description,
+            "value": value
+        }
+
+
+        console.log(JSON.stringify(jsonProduct));
+
         //   if (title && details) {
         //     fetch('http://localhost:8000/notes', {
         //       method: 'POST',
@@ -54,30 +83,30 @@ function AddItem(props) {
         <Container size="sm">
 
 
-            <form noValidate autoComplete="off" onSubmit={console.log('enviado')} >
+            <form noValidate autoComplete="off" onSubmit={handleSubmit} >
                 <Grid
                     container
                     spacing={2}
                     direction="row"
                     alignItems="left"
                     justifyContent="left"
-                  
-                >
-                        <Grid item md={12} lg={12} xs={12}>
 
-                                <Typography
-                variant="h4"
-                color="textSecondary"
-                component="h2"
-                
-            >
-                Cadastrar Lego
-            </Typography>
-            </Grid>
+                >
+                    <Grid item md={12} lg={12} xs={12}>
+
+                        <Typography
+                            variant="h4"
+                            color="textSecondary"
+                            component="h2"
+
+                        >
+                            Cadastrar Lego
+                        </Typography>
+                    </Grid>
                     <Grid item md={8} lg={8} xs={8}>
 
                         <TextField
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={(e) => setNameSet(e.target.value)}
                             label="Nome Set"
                             variant="outlined"
                             color="secondary"
@@ -90,7 +119,7 @@ function AddItem(props) {
                     <Grid item md={4} lg={4}>
 
                         <TextField
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={(e) => setNumberSet(e.target.value)}
                             label="Número Set"
                             variant="outlined"
                             color="secondary"
@@ -114,7 +143,7 @@ function AddItem(props) {
                     </Grid>
                     <Grid item md={12} lg={12}>
                         <TextField
-                            onChange={(e) => setDetails(e.target.value)}
+                            onChange={(e) => setValue(parseFloat(e.target.value))}
                             label="Valor"
                             variant="outlined"
                             color="secondary"
@@ -122,28 +151,26 @@ function AddItem(props) {
                             required
                         />
                     </Grid>
-                    {/* <Grid item md={5} lg={5}>
-                        <TextField
-                            onChange={(e) => setDetails(e.target.value)}
-                            label="Quantidade Peças"
-                            variant="outlined"
-                            color="secondary"
-                            fullWidth
-                            required
-                        />
-                    </Grid> */}
                     <Grid item md={2} lg={2} >
-                 <Typography variant="h6" color="#000">Foto do Set</Typography></Grid>
-                <Grid item md={3} lg={3} >
-                    
-                 <Button    color="secondary"
-                                variant="contained" endIcon={<CloudUploadIcon />} >Upload</Button>
-                                
-                    </Grid>       
+                        <Typography variant="h6" color="#000">Foto do Set(.jpg)</Typography></Grid>
+                    <Grid item md={3} lg={3} >
+
+                       <Button color="secondary"
+                            variant="contained"  type="file" name="file" endIcon={<CloudUploadIcon />} 
+                            onClick={handleClick}> Upload</Button>
+      <input
+        type="file"
+        ref={hiddenFileInput}
+        onChange={handleChange}
+        style={{display: 'none'}} {/* Make the file input element invisible */}
+      />
+                   
+
+                    </Grid>
                     <Grid item md={5} lg={5}>
                         <FormControl className={classes.field}>
                             <FormLabel>Estado</FormLabel>
-                            <RadioGroup value={category} onChange={(e) => setCategory(e.target.value)}>
+                            <RadioGroup value={complete} onChange={(e) => setComplete(e.target.value)}>
                                 <FormControlLabel value="complete" control={<Radio />} label="Completo" />
                                 <FormControlLabel value="incomplete" control={<Radio />} label="Incompleto" />
                             </RadioGroup>
@@ -153,13 +180,13 @@ function AddItem(props) {
                         justifyContent="center"
                         alignItems="center">
                         <Grid item>
-                            <Button 
+                            <Button
                                 type="submit"
                                 color="primary"
                                 variant="contained"
                                 endIcon={<AddIcon />}
                             >
-                                
+
                                 Cadastrar
                             </Button >
                         </Grid>

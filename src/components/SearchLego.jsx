@@ -42,9 +42,7 @@ function SearchLego(props) {
         if (title == '') {
             setTitleError(true)
         }
-        if (details == '') {
-            setDetailsError(true)
-        }
+
         //   if (title && details) {
         //     fetch('http://localhost:8000/notes', {
         //       method: 'POST',
