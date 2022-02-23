@@ -15,6 +15,7 @@ import React from "react";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import api from "../services/api";
 
 const useStyles = makeStyles({
   field: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles({
   },
 });
 
-function AddItem(props) {
+ function AddItem(props) {
   const classes = useStyles();
   const [nameSet, setNameSet] = useState("");
   const [numberSet, setNumberSet] = useState("");
@@ -58,7 +59,7 @@ function AddItem(props) {
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(false);
     if (numberSet == "") {
@@ -66,7 +67,7 @@ function AddItem(props) {
     }
     const formData = new FormData();
 
-    formData.append('File', selectedFile);
+    // formData.append('imageFile', selectedFile);
     const jsonProduct = {
       numberSet: numberSet,
       nameSet: nameSet,
@@ -74,8 +75,49 @@ function AddItem(props) {
       description: description,
       value: value,
     };
+    const axios = require('axios');
+    var FormData = require('form-data');
+    var data = new FormData();
+    data.append('imageFile', selectedFile );
+    data.append('jsonProduct', '{    \n    "numberSet":"123",\n     "complete":"true",\n     "description":"123",\n    "nameSet":"123",\n   "value": 220.0\n}\n\n', {contentType: 'application/json'});
+    
+    var config = {
+      method: 'post',
+      url: 'http://localhost:8080/product',
+      headers: { 
+        ...data.getHeaders()
+      },
+      data : data
+    };
+    
+    axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
+    // console.log(JSON.stringify(jsonProduct));
+    // var data = new FormData();
+    // data.append('imageFile', selectedFile );
+    // data.append('jsonProduct', jsonProduct); 
+    // var config = {
+    //   headers: { 
+    //     ...data.getHeaders()
+    //   }
+    // };
+    
+    // await axios.post('http://localhost:8080/product',data, config)
+    // .then(function (response) {
+    //   console.log(JSON.stringify(response.data));
+    // })
+    // .catch(function (error) {
+    //   console.log(error);
+    // });
 
-    console.log(JSON.stringify(jsonProduct));
+  }
+
 
     //   if (title && details) {
     //     fetch('http://localhost:8000/notes', {
@@ -84,7 +126,6 @@ function AddItem(props) {
     //       body: JSON.stringify({ title, details, category })
     //     }).then(() => redirect'/'))
     //   }
-  };
 
   return (
     <Container size="sm">
