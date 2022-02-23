@@ -16,6 +16,7 @@ import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import api from "../services/api";
+import axios from "axios";
 
 const useStyles = makeStyles({
   field: {
@@ -46,6 +47,7 @@ const useStyles = makeStyles({
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [error, setError] = useState(false);
 
+
   const changeHandler = (e) => {
     setSelectedFile(e.target.files[0]);
     setIsFilePicked(true);
@@ -62,63 +64,36 @@ const useStyles = makeStyles({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(false);
-    if (numberSet == "") {
-      setError(true);
-    }
-    const formData = new FormData();
+    // if (numberSet == "") {
+    //   setError(true);
+    // }
 
+
+    // Add images to form data
+    // formData.append('jsonProduct', JSON.stringify(jsonProduct));
     // formData.append('imageFile', selectedFile);
-    const jsonProduct = {
-      numberSet: numberSet,
-      nameSet: nameSet,
-      complete: complete,
-      description: description,
-      value: value,
-    };
-    const axios = require('axios');
-    var FormData = require('form-data');
-    var data = new FormData();
-    data.append('imageFile', selectedFile );
-    data.append('jsonProduct', '{    \n    "numberSet":"123",\n     "complete":"true",\n     "description":"123",\n    "nameSet":"123",\n   "value": 220.0\n}\n\n', {contentType: 'application/json'});
     
-    var config = {
-      method: 'post',
-      url: 'http://localhost:8080/product',
-      headers: { 
-        ...data.getHeaders()
-      },
-      data : data
-    };
-    
-    axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    
-    // console.log(JSON.stringify(jsonProduct));
-    // var data = new FormData();
-    // data.append('imageFile', selectedFile );
-    // data.append('jsonProduct', jsonProduct); 
-    // var config = {
-    //   headers: { 
-    //     ...data.getHeaders()
-    //   }
-    // };
-    
-    // await axios.post('http://localhost:8080/product',data, config)
-    // .then(function (response) {
-    //   console.log(JSON.stringify(response.data));
-    // })
-    // .catch(function (error) {
-    //   console.log(error);
-    // });
+    var formData = new FormData();
+    var completeBoolean = (complete=="complete"? true:false)
+    formData.append("imageFile", selectedFile);
+    formData.append("numberSet", numberSet);
+    formData.append("nameSet", nameSet);
+    formData.append("complete", completeBoolean.toString());
+    formData.append("description", description);
+    formData.append("value", value.toString());
+    axios.post("http://localhost:8080/product", formData).then( response => {console.log(response.data)}).
+    catch(() => console.log("error"));
+
+ 
+    setNameSet("");
+    setNumberSet("");
+    setDescription("");
+    setComplete("complete");
+    setValue(0.0);
+    setSelectedFile("");
+    setIsFilePicked(false);
 
   }
-
-
     //   if (title && details) {
     //     fetch('http://localhost:8000/notes', {
     //       method: 'POST',
