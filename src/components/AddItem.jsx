@@ -8,14 +8,14 @@ import {
   makeStyles,
   Radio,
   RadioGroup,
+  Snackbar,
   TextField,
 } from "@material-ui/core";
-import { Typography } from "@mui/material";
+import { Alert, Typography } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import api from "../services/api";
+
 import axios from "axios";
 
 const useStyles = makeStyles({
@@ -36,7 +36,8 @@ const useStyles = makeStyles({
   },
 });
 
- function AddItem(props) {
+
+function AddItem(props) {
   const classes = useStyles();
   const [nameSet, setNameSet] = useState("");
   const [numberSet, setNumberSet] = useState("");
@@ -46,12 +47,21 @@ const useStyles = makeStyles({
   const [selectedFile, setSelectedFile] = useState("");
   const [isFilePicked, setIsFilePicked] = useState(false);
   const [error, setError] = useState(false);
-
-
+  
   const changeHandler = (e) => {
     setSelectedFile(e.target.files[0]);
     setIsFilePicked(true);
   };
+  const handleReset = () => {
+    Array.from(document.querySelectorAll('input'));
+    this.setState({
+      itemvalues: [{}]
+    });
+  };
+  const handleClose = (event, reason) => {
+      setOpen(false);
+    }
+
   const hiddenFileInput = React.useRef(null);
 
   // Programatically click the hidden file input element
@@ -60,31 +70,37 @@ const useStyles = makeStyles({
     hiddenFileInput.current.click();
   };
 
+  const [open, setOpen] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(nameSet==="" || numberSet == ""){
+    setOpen(true);
+    }
+    else{
+      setOpen(false)
+
+      
+
+    
     setError(false);
-    // if (numberSet == "") {
-    //   setError(true);
-    // }
-
-
-    // Add images to form data
-    // formData.append('jsonProduct', JSON.stringify(jsonProduct));
-    // formData.append('imageFile', selectedFile);
     
     var formData = new FormData();
-    var completeBoolean = (complete=="complete"? true:false)
+    var completeBoolean = complete == "complete" ? true : false;
     formData.append("imageFile", selectedFile);
     formData.append("numberSet", numberSet);
     formData.append("nameSet", nameSet);
     formData.append("complete", completeBoolean.toString());
     formData.append("description", description);
     formData.append("value", value.toString());
-    axios.post("http://localhost:8080/product", formData).then( response => {console.log(response.data)}).
-    catch(() => console.log("error"));
-
- 
+    const result = await axios
+      .post("http://localhost:8080/product", formData)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch(() => console.log("error"));
+    console.log("Aguardando post");
+    const json = await result;
     setNameSet("");
     setNumberSet("");
     setDescription("");
@@ -92,26 +108,16 @@ const useStyles = makeStyles({
     setValue(0.0);
     setSelectedFile("");
     setIsFilePicked(false);
-
+    window.location.reload();
+    
   }
-    //   if (title && details) {
-    //     fetch('http://localhost:8000/notes', {
-    //       method: 'POST',
-    //       headers: {"Content-type": "application/json"},
-    //       body: JSON.stringify({ title, details, category })
-    //     }).then(() => redirect'/'))
-    //   }
+  
+  };
 
   return (
-    <Container size="sm">
+    <Container>
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-        <Grid
-          container
-          spacing={2}
-          direction="row"
-          alignItems="left"
-          justifyContent="left"
-        >
+        <Grid container spacing={2} direction="row">
           <Grid item md={12} lg={12} xs={12}>
             <Typography variant="h4" color="textSecondary" component="h2">
               Cadastrar Lego
@@ -211,9 +217,23 @@ const useStyles = makeStyles({
             </Grid>
           </Grid>
         </Grid>
+        <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+              >
+                <Alert
+                  onClose={handleClose}
+                  severity="error"
+                  sx={{ width: "100%" }}
+                >
+                  Complete as informações Necessárias
+                </Alert>
+              </Snackbar>
       </form>
     </Container>
   );
 }
+
 
 export default AddItem;

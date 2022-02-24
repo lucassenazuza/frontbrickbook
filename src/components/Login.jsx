@@ -1,13 +1,9 @@
-import {
-  Card,
-  Grid,
-  TextField,
-} from "@mui/material";
+import { Alert, Card, Grid, TextField } from "@mui/material";
 import React from "react";
-import api from '../services/api'
+import api from "../services/api";
 
 import { makeStyles } from "@material-ui/styles";
-import { Button } from "@material-ui/core";
+import { Button, Snackbar } from "@material-ui/core";
 import { KeyboardArrowRight } from "@mui/icons-material";
 import LogoLego from "components/LogoLego";
 import { useState, useContext } from "react";
@@ -44,19 +40,38 @@ function Login(props) {
 
   const { authenticated, login } = useContext(AuthContext);
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-      login(email, password) // integração com meu contexto
-  }
+    login(email, password); // integração com meu contexto
+    setOpen(true);
+  };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <div>
       <Card className={classes.card}>
-        <form noValidate autoComplete="off" className={classes.root} onSubmit={handleSubmit}>
+        <form
+          noValidate
+          autoComplete="off"
+          className={classes.root}
+          onSubmit={handleSubmit}
+        >
           <Grid
             container
             spacing={0}
@@ -67,9 +82,17 @@ function Login(props) {
             {/* <Typography variant="h4" color="initial" className={classes.item}>
               BrickBook
             </Typography> */}
-            <LogoLego locationFile={'/logobrick.png'}/>
+            <LogoLego locationFile={"/logobrick.png"} />
             <Grid item className={classes.item}>
-              <TextField label="Login" color="secondary" fullWidth required onChange = {(e) => {setEmail(e.target.value)}} />
+              <TextField
+                label="Login"
+                color="secondary"
+                fullWidth
+                required
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
             </Grid>
             <Grid item className={classes.item}>
               <TextField
@@ -78,7 +101,9 @@ function Login(props) {
                 type="password"
                 fullWidth
                 required
-                onChange = {(e) => {setPassword(e.target.value)}}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
               />
             </Grid>
             <Grid item className={classes.item}>
@@ -90,6 +115,19 @@ function Login(props) {
               >
                 Login
               </Button>
+              <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+              >
+                <Alert
+                  onClose={handleClose}
+                  severity="error"
+                  sx={{ width: "100%" }}
+                >
+                  Erro ao fazer login!
+                </Alert>
+              </Snackbar>
             </Grid>
           </Grid>
         </form>
