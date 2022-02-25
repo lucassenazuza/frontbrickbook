@@ -14,6 +14,7 @@ import { useContext } from "react";
 import Layout from "./components/Layout";
 import AddItem from "./components/AddItem";
 import SearchLego from "./components/SearchLego";
+import Resume from "./components/Resume";
 
 function AppRoutes(props) {
   const Private = ({ children }) => {
@@ -69,6 +70,17 @@ function AppRoutes(props) {
                 <Private>
                   <Layout>
                     <AddItem />
+                  </Layout>
+                </Private>
+              }
+            />
+            <Route
+              exact
+              path="/resume"
+              element={
+                <Private>
+                  <Layout>
+                    <Resume />
                   </Layout>
                 </Private>
               }

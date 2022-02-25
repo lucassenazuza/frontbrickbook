@@ -4,6 +4,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
+import ArticleIcon from '@mui/icons-material/Article';
 import { makeStyles } from "@material-ui/styles";
 import SubjectIcon from "@mui/icons-material/Subject";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,6 +17,8 @@ import React, { useContext } from "react";
 import LogoLego from "./LogoLego";
 import { blue } from "@material-ui/core/colors";
 import UserBar from "./UserBar";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 const drawerWidth = 300;
 
@@ -46,13 +49,18 @@ function Layout({ children }) {
   const menuItems = [
     {
       text: "Cadastrar",
-      icon: <SubjectIcon color="primary" />,
+      icon: <AddBoxIcon color="primary" />,
       path: "/addlego",
     },
     {
       text: "Buscar",
-      icon: <SearchIcon color="primary" />,
+      icon: <ManageSearchIcon color="primary" />,
       path: "/searchlego",
+    },
+    {
+      text: "Relatório",
+      icon: <ArticleIcon color="primary" />,
+      path: "/resume",
     },
     {
       text: "Logout",
