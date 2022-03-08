@@ -30,43 +30,33 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData('Republic Frigate',7654, 1452, 'Completo', 23.5),
-  createData('Republic Frigate',7654, 1452, 'Completo', 23.5),
-  createData('Republic Frigate',7654, 1452, 'Completo', 23.5),
-  createData('Republic Frigate',7654, 1452, 'Completo', 23.5),
-  createData('Republic Frigate',7654, 1452, 'Completo', 23.5)
-];
 
-export default function TableData() {
+
+
+export default function TableData(props) {
   return (
     <TableContainer component={Paper} sx={{marginTop: 5}}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Nome Lego</StyledTableCell>
-            <StyledTableCell align="right">Número set</StyledTableCell>
-            <StyledTableCell align="right">Qtd. Peças</StyledTableCell>
-            <StyledTableCell align="right">Estado</StyledTableCell>
+            <StyledTableCell align="right" >Nome Lego</StyledTableCell>
+            <StyledTableCell align="right">Número</StyledTableCell>
+            <StyledTableCell align="right">Completo</StyledTableCell>
             <StyledTableCell align="right">Preço(R$)</StyledTableCell>
+            <StyledTableCell align="right">Descrição</StyledTableCell>
             <StyledTableCell align="center">Foto</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {props.rows.map((row) => (
             <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-              <StyledTableCell align="center"><a href="#"><ImageIcon /></a></StyledTableCell>
+              <StyledTableCell align="right">{row.nameSet}</StyledTableCell>
+              <StyledTableCell align="right">{row.numberSet}</StyledTableCell>
+              <StyledTableCell align="right">{(row.complete?"sim":"não")}</StyledTableCell>
+              <StyledTableCell align="right">{row.value}</StyledTableCell>
+              <StyledTableCell align="right">{row.description}</StyledTableCell>
+              <StyledTableCell align="center"><img src={"https://drive.google.com/uc?id="+row.linkImage} alt="" /></StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

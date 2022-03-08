@@ -1,108 +1,146 @@
-import { Button, Container, FormControl, FormControlLabel, FormLabel, Grid, makeStyles, Radio, RadioGroup, TextField } from '@material-ui/core';
-import { Typography } from '@mui/material';
-import React from 'react';
-import { useState } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import SearchIcon from '@mui/icons-material/Search';
-import TableData from './TableData';
+import {
+  Button,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  makeStyles,
+  Radio,
+  RadioGroup,
+  Snackbar,
+  TextField,
+} from "@material-ui/core";
+import { Alert, Typography } from "@mui/material";
+import React from "react";
+import { useState } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import SearchIcon from "@mui/icons-material/Search";
+import TableData from "./TableData";
+import axios from "axios";
 
 const useStyles = makeStyles({
-    field: {
-        marginTop: 20,
-        marginBottom: 20,
-        display: 'block'
-    },
-    row: {
-        display: 'flex',
-        padding: 10,
-        margin: 10
-    },
-    item: {
-        margin: 5,
-        padding: 5,
-        justifyContent: "right",
-    },
-})
-
+  field: {
+    marginTop: 20,
+    marginBottom: 20,
+    display: "block",
+  },
+  row: {
+    display: "flex",
+    padding: 10,
+    margin: 10,
+  },
+  item: {
+    margin: 5,
+    padding: 5,
+    justifyContent: "right",
+  },
+});
 
 function SearchLego(props) {
-    const classes = useStyles()
-    const [title, setTitle] = useState('')
-    const [details, setDetails] = useState('')
-    const [titleError, setTitleError] = useState(false)
-    const [detailsError, setDetailsError] = useState(false)
-    const [category, setCategory] = useState('money')
+  const [open, setOpen] = useState(false);
+  const classes = useStyles();
+  const [title, setTitle] = useState("");
+  const [searchNumber, setSearchNumber] = useState("");
+  const [titleError, setTitleError] = useState(false);
+  const [detailsError, setDetailsError] = useState(false);
+  const [category, setCategory] = useState("money");
+  const [error, setError] = useState(false);
+  const [rows, setRows] = useState([]);
+  const handleClose = (event, reason) => {
+    setOpen(false);
+  }
+   const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        setTitleError(false)
-        setDetailsError(false)
+    if (searchNumber === "")  {
+      setOpen(true);
+    } else {
+      setOpen(false);
 
-        if (title == '') {
-            setTitleError(true)
-        }
+      setError(false);
 
-        //   if (title && details) {
-        //     fetch('http://localhost:8000/notes', {
-        //       method: 'POST',
-        //       headers: {"Content-type": "application/json"},
-        //       body: JSON.stringify({ title, details, category })
-        //     }).then(() => redirect'/'))
-        //   } 
+      
+      const result = await axios
+        .get("http://localhost:8080/product/"+searchNumber)
+        .then((response) => {
+            console.log("ok");
+          console.log(response.data);
+          if (response.data==''){
+            setOpen(true);
+          }else{
+          setRows([response.data]);
+          }
+        })
+        .catch(() => {setOpen(true);} );
+        
+      
     }
+  };
+  function createData(
+    nameSet,
+    numberSet,
+    complete,
+    value,
+    description,
+    linkImage
+  ) {
+    return { nameSet, numberSet, complete, value, description, linkImage };
+  }
+  
 
-    return (
-        <Container size="sm">
+  return (
+    <Container>
+      <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <Grid container spacing={2} direction="row" alignItems="center">
+          <Grid item md={12} lg={12} xs={12}>
+            <Typography variant="h4" color="textSecondary" component="h2">
+              Busca Lego
+            </Typography>
+          </Grid>
 
+          <Grid item md={8} lg={8}>
+            <TextField
+              onChange={(e) => setSearchNumber(e.target.value)}
+              label="Número Set"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              required
+            />
+          </Grid>
 
-            <form noValidate autoComplete="off" onSubmit={console.log('enviado')} >
-                <Grid
-                    container
-                    spacing={2}
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="left"
+          <Grid item md={4} lg={4}>
+            <Button
+            type="submit"
+              color="primary"
+              size="large"
+              variant="contained"
+              endIcon={<SearchIcon />}
+            >
+              Buscar
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
 
+      <TableData rows={rows} />
+      <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+              >
+                <Alert
+                  onClose={handleClose}
+                  severity="error"
+                  sx={{ width: "100%" }}
                 >
-                    <Grid item md={12} lg={12} xs={12}>
-
-                        <Typography
-                            variant="h4"
-                            color="textSecondary"
-                            component="h2"
-
-                        >
-                            Busca Lego
-                        </Typography>
-                    </Grid>
-
-
-                    <Grid item md={8} lg={8}>
-                        <TextField
-                            onChange={(e) => setDetails(e.target.value)}
-                            label="Número Set"
-                            variant="outlined"
-                            color="secondary"
-                            fullWidth
-                            required
-                        />
-                    </Grid>
-
-                    <Grid item md={4} lg={4}>
-
-                        <Button color="primary" size="large" 
-
-                            variant="contained" endIcon={<SearchIcon />} >Buscar</Button>
-
-                    </Grid>
-                </Grid>
-            </form>
-
-            <TableData />
-        </Container>
-
-    );
+                  Não Encontrado
+                </Alert>
+              </Snackbar>
+    </Container>
+  );
 }
 
 export default SearchLego;
